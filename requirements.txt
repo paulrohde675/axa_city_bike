@@ -1,3 +1,5 @@
 # To ensure app dependencies are ported from your virtual environment/host machine into your container, run 'pip freeze > requirements.txt' in the terminal to overwrite this file
 pandas==2.0.2
 pre-commit==3.3.3
+jupyterlab==4.0.2
+ipykernel==6.23.3
