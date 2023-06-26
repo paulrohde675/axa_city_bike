@@ -3,3 +3,4 @@ pandas==2.0.2
 pre-commit==3.3.3
 jupyterlab==4.0.2
 ipykernel==6.23.3
+pyarrow==12.0.1
