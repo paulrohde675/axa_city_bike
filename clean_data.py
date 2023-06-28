@@ -37,9 +37,12 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     # remove people older than 100y
     df = df[df['birth_year'] > 1918]
 
-    # convert float ids to int
+    # fix types
     df['start_station_id'] = df['start_station_id'].astype(int)
     df['end_station_id'] = df['end_station_id'].astype(int)
+    df['starttime'] = pd.to_datetime(df['starttime'])
+    df['stoptime'] = pd.to_datetime(df['stoptime'])
+
 
     df = df.reset_index(drop=True)    
     return df
