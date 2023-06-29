@@ -3,11 +3,10 @@ from sklearn.utils import resample
 import math
 import numpy as np
 
-def mod_feature(df: pd.DataFrame, periodic_feature: bool = True) -> pd.DataFrame:
+def mod_feature(df: pd.DataFrame, periodic_feature: bool = False) -> pd.DataFrame:
     """ This functions modifies the featurs accroding to the ML method """
     
     # convert datime to categorical feature
-    df['month'] = df['starttime'].dt.month
     df['day'] = df['starttime'].dt.dayofweek
     
     if periodic_feature:
@@ -15,8 +14,12 @@ def mod_feature(df: pd.DataFrame, periodic_feature: bool = True) -> pd.DataFrame
         df['day_sin'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.sin)
         df['day_cos'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.cos)
         df = df.drop(columns=['time_elapsed'])
-    
+        
+        df['month_sin'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.sin)
+        df['month_cos'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.cos)
+        
     else:
+        df['month'] = df['starttime'].dt.month
         df['time'] = df['starttime'].dt.hour
     
     # target to int
