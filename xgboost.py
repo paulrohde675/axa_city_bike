@@ -6,11 +6,20 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
-from sklearn.metrics import make_scorer
+from sklearn.metrics import f1_score
+from sklearn.metrics import roc_auc_score
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, roc_auc_score, confusion_matrix
+from evaluate_model import evaluate_model
+import multiprocessing
 
-def logistic_reg(df: pd.DataFrame):
+def xg_boost(df: pd.DataFrame):
     """ This functions modifies the featurs accroding to the ML method """
+
+    # get the number of logical cpu cores
+    n_cores = multiprocessing.cpu_count()
+    print(f'num avail cores = {n_cores}')
 
     scaler = StandardScaler()
     data = scaler.fit_transform(df)
@@ -21,26 +30,23 @@ def logistic_reg(df: pd.DataFrame):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Init logistic Regression model
-    logisticRegr = GradientBoostingClassifier()
-    
-    scoring = {'accuracy': make_scorer(accuracy_score),
-           'precision': make_scorer(precision_score),'recall':make_scorer(recall_score)}
+    model = GradientBoostingClassifier()
     
     # Define the hyperparameter grid
     param_grid = {
         "loss":["log_loss"],
-        "learning_rate": [0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2],
-        "min_samples_split": np.linspace(0.1, 0.5, 12),
-        "min_samples_leaf": np.linspace(0.1, 0.5, 12),
-        "max_depth":[3,5,8],
-        "max_features":["log2","sqrt"],
-        "criterion": ["friedman_mse",  "mae"],
-        "subsample":[0.5, 0.618, 0.8, 0.85, 0.9, 0.95, 1.0],
+        "learning_rate": [0.01, 0.1], # , 0.2
+        "min_samples_split": np.linspace(0.1, 0.5, 2),
+        "min_samples_leaf": np.linspace(0.1, 0.5, 2),
+        "max_depth":[5], #3,5,8
+        "max_features":["log2"], #,"sqrt"
+        "criterion": ["friedman_mse"], #,  "mae"
+        "subsample":[0.75], # [0.5, 0.75, 1.0],
         "n_estimators":[10]
     }
 
     # Create the GridSearchCV object
-    grid_search = GridSearchCV(logisticRegr, param_grid, scoring=scoring, refit=False, cv=5, n_jobs=-1)
+    grid_search = GridSearchCV(model, param_grid, refit=True, cv=5, n_jobs=-1, verbose=2, scoring='f1')
     
     # Fit the GridSearchCV object to the training data
     grid_search.fit(X_train, y_train)    
@@ -51,9 +57,7 @@ def logistic_reg(df: pd.DataFrame):
     # Get the best model found
     best_model = grid_search.best_estimator_
 
-    # Evaluate the best model on the test set
-    accuracy = best_model.score(X_test, y_test)
-    print("Accuracy on Test Set: {:.3f}".format(accuracy))
+    evaluate_model(best_model, 'xgBoost', X_test, y_test)
     
     return
 
@@ -64,6 +68,6 @@ if __name__ == '__main__':
     print(f'n_rows before undersampling: {len(df.index)}')
     
     # clean data
-    df = logistic_reg(df)
+    xg_boost(df)
     
     

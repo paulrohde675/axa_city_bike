@@ -3,6 +3,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import roc_auc_score
 
 def logistic_reg(df: pd.DataFrame):
     """ This functions modifies the featurs accroding to the ML method """
@@ -20,12 +25,12 @@ def logistic_reg(df: pd.DataFrame):
     
     # Define the hyperparameter grid
     param_grid = {
-        'penalty': ['elasticnet', 'l2'],
+        'penalty': ['l1', 'l2'],
         'C': [0.5, 1, 5],
     }
 
     # Create the GridSearchCV object
-    grid_search = GridSearchCV(logisticRegr, param_grid, cv=3, scoring='accuracy', n_jobs=-1)
+    grid_search = GridSearchCV(logisticRegr, param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=2)
     
     # Fit the GridSearchCV object to the training data
     grid_search.fit(X_train, y_train)    
@@ -36,9 +41,20 @@ def logistic_reg(df: pd.DataFrame):
     # Get the best model found
     best_model = grid_search.best_estimator_
 
-    # Evaluate the best model on the test set
-    accuracy = best_model.score(X_test, y_test)
-    print("Accuracy on Test Set: {:.3f}".format(accuracy))
+    # Prediction on test split
+    y_pred = best_model.predict(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    auc_roc = roc_auc_score(y_test, y_pred)
+
+    print("Accuracy:", accuracy)
+    print("Precision:", precision)
+    print("Recall:", recall)
+    print("F1 score:", f1)
+    print("AUC-ROC:", auc_roc)
     
     return
 
