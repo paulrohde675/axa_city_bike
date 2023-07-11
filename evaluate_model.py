@@ -9,7 +9,7 @@ from sklearn.metrics import roc_curve, roc_auc_score, confusion_matrix
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_test: pd.DataFrame):
+def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_test: pd.DataFrame) -> None:
 
     # Prediction on test split
     y_pred = model.predict(X_test)
@@ -37,7 +37,7 @@ def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_te
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend(loc='lower right')
-    plt.savefig(f'data/final/roc_{cfg.model_type}.png')     
+    plt.savefig(f'data/final/roc_{cfg.model_type.value}.png')     
     plt.cla()
     
     # plot confusion matrix
@@ -50,6 +50,5 @@ def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_te
     plt.xticks([0, 1], ['Negative', 'Positive'])
     plt.yticks([0, 1], ['Negative', 'Positive'])
     plt.title('Confusion Matrix')
-    plt.savefig(f'data/final/confusion_{cfg.model_type}.png')     
+    plt.savefig(f'data/final/confusion_{cfg.model_type.value}.png')     
     plt.cla()
-    

@@ -15,9 +15,10 @@ def read_data_to_feather():
 
 def create_sample_data_set():
     df = pd.read_feather('data/raw/2018-citibike-tripdata.feather')
-    df = df.sample(frac=0.1, random_state=42)
+    df = df.sample(frac=0.001, random_state=42)
     df = df.reset_index(drop=True)
-    df.to_feather('data/raw/2018-citibike-tripdata_sample.feather')
+    df.to_feather('data/raw/2018-citibike-tripdata_xxs.feather')
+    df.to_csv('data/raw/2018-citibike-tripdata_xxs.csv')
 
 
 if __name__ == '__main__':

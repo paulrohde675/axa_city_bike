@@ -4,6 +4,8 @@ import math
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 from config import Config, imb_learn_options, model_options
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     """ Clean data by removing outlier rows """
@@ -66,22 +68,56 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
         df['month_sin'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.sin)
         df['month_cos'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.cos)
         
-    elif cfg.model_type == model_options.XGBOOST:
+    elif cfg.model_type == model_options.XGBOOST or cfg.model_type == model_options.RANDOM_FOREST:
         df['month'] = df['starttime'].dt.month
         df['time'] = df['starttime'].dt.hour
+        df = pd.get_dummies(df, columns=['gender'], prefix='gender')
     
     # target to int
     df.loc[df['usertype'] == 'Customer', 'usertype'] = 0
     df.loc[df['usertype'] == 'Subscriber', 'usertype'] = 1
     df['usertype'] = df['usertype'].astype(int)
     
-    
     # drop datetimes
     df = df.drop(columns=['starttime', 'stoptime'])
 
     return df
 
-def handle_scewd_data(cfg: Config, X_train: pd.DataFrame, y_train: pd.DataFrame):
+
+def test_train_split(df: pd.DataFrame, cfg: Config) -> list[pd.DataFrame]:
+    """ Perfrom the test train split according to the parameter set in config """
+    
+    y = df['usertype']
+    X = df.drop(columns=['usertype'])
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=cfg.test_split, random_state=cfg.random_state)
+    
+    return [X_train, X_test, y_train, y_test]
+
+
+def scale_data(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame) -> list[pd.DataFrame | pd.Series]:
+    """ Scale data by removing the mean and scaling to unit variance using sklearn StandardScaler """
+    
+    # store column names
+    x_cols = X_train.columns
+    y_col = y_train.name
+    
+    # perform standard scaling by removing the mean and scaling to unit variance
+    scaler = StandardScaler()
+    scaler = scaler.fit(X_train, y_train)
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+    
+    # rebuild pd.Dataframes
+    X_train = pd.DataFrame(X_train, columns=x_cols)
+    y_train = pd.Series(y_train, name=y_col)
+    X_test = pd.DataFrame(X_test, columns=x_cols)
+    
+    return [X_train, y_train, X_test]
+
+
+def handle_skewed_data(cfg: Config, X_train: pd.DataFrame, y_train: pd.DataFrame):
+    """ Handle skewed by either applying over- or undersampling """
+    
     if cfg.imb_mode == imb_learn_options.SMOTE:
         # Apply SMOTE to oversample the minority class
         smote = SMOTE(random_state=cfg.random_state)
