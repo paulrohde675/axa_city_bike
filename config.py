@@ -74,9 +74,17 @@ class Config:
     X_test: pd.DataFrame = pd.DataFrame()
     y_test: pd.DataFrame = pd.DataFrame()
     
-    # experiment results
+    # model
     model: BaseEstimator | None = None
     scaler: StandardScaler | None = None
+    
+    # evaluation
     feat_importance: Bunch | None = None
+    accuracy: float = 0
+    precision: float = 0
+    recall: float = 0
+    f1: float = 0
+    auc_roc: float = 0
+    classification_refport: str = ''
     
     
