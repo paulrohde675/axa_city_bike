@@ -12,7 +12,7 @@ def init_model(cfg: Config) -> BaseEstimator:
     if cfg.model_type == model_options.LOGISTIC:
         return LogisticRegression()
     
-    elif cfg.model_type == model_options.XGBOOST:
+    elif cfg.model_type == model_options.GRAD_BOOST:
         return GradientBoostingClassifier()
 
     elif cfg.model_type == model_options.RANDOM_FOREST:
@@ -31,6 +31,9 @@ def train_model(model: BaseEstimator,
     # Fit the GridSearchCV object to the training data
     grid_search.fit(X_train, y_train)    
     best_model = grid_search.best_estimator_
+    
+    # save model
+    cfg.model = best_model
     
     # Print the best hyperparameters found
     print("Best Hyperparameters: ", grid_search.best_params_)

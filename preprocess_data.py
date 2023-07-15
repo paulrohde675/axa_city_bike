@@ -68,7 +68,7 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
         df['month_sin'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.sin)
         df['month_cos'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.cos)
         
-    elif cfg.model_type == model_options.XGBOOST or cfg.model_type == model_options.RANDOM_FOREST:
+    elif cfg.model_type == model_options.GRAD_BOOST or cfg.model_type == model_options.RANDOM_FOREST:
         df['month'] = df['starttime'].dt.month
         df['time'] = df['starttime'].dt.hour
         df = pd.get_dummies(df, columns=['gender'], prefix='gender')
@@ -91,10 +91,17 @@ def test_train_split(df: pd.DataFrame, cfg: Config) -> list[pd.DataFrame]:
     X = df.drop(columns=['usertype'])
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=cfg.test_split, random_state=cfg.random_state)
     
+    # save test data
+    cfg.X_test = X_test
+    cfg.y_test = y_test
+    
     return [X_train, X_test, y_train, y_test]
 
 
-def scale_data(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame) -> list[pd.DataFrame | pd.Series]:
+def scale_data(cfg: Config, 
+               X_train: pd.DataFrame, 
+               y_train: pd.Series, 
+               X_test: pd.DataFrame) -> list[pd.DataFrame | pd.Series]:
     """ Scale data by removing the mean and scaling to unit variance using sklearn StandardScaler """
     
     # store column names
@@ -111,6 +118,9 @@ def scale_data(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame) 
     X_train = pd.DataFrame(X_train, columns=x_cols)
     y_train = pd.Series(y_train, name=y_col)
     X_test = pd.DataFrame(X_test, columns=x_cols)
+    
+    # save scaler
+    cfg.scaler = scaler
     
     return [X_train, y_train, X_test]
 

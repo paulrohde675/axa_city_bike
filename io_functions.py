@@ -1,5 +1,6 @@
 import pandas as pd
-
+import pickle
+from config import Config
 
 # load data by looping over all 12 shards
 def read_data_to_feather():
@@ -20,6 +21,12 @@ def create_sample_data_set():
     df.to_feather('data/raw/2018-citibike-tripdata_xxs.feather')
     df.to_csv('data/raw/2018-citibike-tripdata_xxs.csv')
 
+
+def save_run_to_pickle(cfg: Config) -> None:
+    """ Save the config file with all experment parameter and results to file using pickle """
+    
+    with open(f'{cfg.path}/results.pickle', 'wb') as handle:
+        pickle.dump(cfg, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 if __name__ == '__main__':
     create_sample_data_set()

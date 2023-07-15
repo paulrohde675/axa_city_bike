@@ -1,5 +1,8 @@
-import numpy as np
+import pandas as pd
 from enum import Enum
+from sklearn.base import BaseEstimator
+from sklearn.preprocessing import StandardScaler
+from sklearn.utils import Bunch
 
 imb_learn_options = Enum('smote', 'undersampling')
 model_options = Enum('logistic', 'xgboost')
@@ -10,17 +13,19 @@ class imb_learn_options(Enum):
 
 class model_options(Enum):
     LOGISTIC = 'logistic'
-    XGBOOST = 'xgboost'
+    GRAD_BOOST = 'grad_boost'
     RANDOM_FOREST = 'random_forest'
 
 class Config:
     
     def __init__(self, 
+                 run_name: str,
                  model_type: model_options,
                  scoring = 'f1',
                  test_split = 0.3,
                  cv_folds = 5,
                  imb_mode: imb_learn_options = imb_learn_options.UNDERSAMPLING) -> None:
+        self.run_name = run_name
         self.random_state = 42
         self.test_split = test_split
         self.model_type: model_options = model_type
@@ -28,8 +33,12 @@ class Config:
         self.imb_mode: imb_learn_options = imb_mode
         self.cv_folds = cv_folds
         
+        # init path
+        self.path = f"data/final/{self.run_name}/"
+        
+        
         # Define the hyperparameter grid
-        if model_type == model_options.XGBOOST:
+        if model_type == model_options.GRAD_BOOST:
         #    self.hyperparam_grid = {
         #         "loss":["log_loss"],
         #         "learning_rate": [0.01], #0.01,  , 0.2
@@ -42,8 +51,8 @@ class Config:
         #         "n_estimators":[10]
         #     }  
             self.hyperparam_grid = {
-                'n_estimators': [100, 200],
-                'learning_rate': [0.1, 0.01]
+                'n_estimators': [50, 75],
+                'learning_rate': [0.1] # , 0.01
             }
            
         elif model_type == model_options.LOGISTIC:
@@ -60,7 +69,14 @@ class Config:
                 'min_samples_split': [2, 5],#2, 5, 10
                 'n_estimators': [2, 5, 10] #200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000
             }
+        
+    # test data
+    X_test: pd.DataFrame = pd.DataFrame()
+    y_test: pd.DataFrame = pd.DataFrame()
     
-
+    # experiment results
+    model: BaseEstimator | None = None
+    scaler: StandardScaler | None = None
+    feat_importance: Bunch | None = None
     
     

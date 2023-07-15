@@ -1,14 +1,20 @@
+import os
+import logging
+import pandas as pd
 from preprocess_data import handle_skewed_data, clean_data, mod_feature, test_train_split, scale_data
 from evaluate_model import evaluate_model
 from train_model import init_model, train_model
 from feature_importance import compute_perm_feature_importance
 from config import Config, model_options, imb_learn_options
-import pandas as pd
-import logging
+from io_functions import save_run_to_pickle
 
 def pipeline(cfg: Config):
     """ Main pipe"""
-    logging.info('Run Pipeline')
+    logging.info(f'Run Experimnet {cfg.run_name}')
+    
+    # create folder to store results
+    if not os.path.exists(cfg.path):
+        os.makedirs(cfg.path)
     
     # load data
     df = pd.read_feather('data/raw/2018-citibike-tripdata_sample.feather')
@@ -27,7 +33,7 @@ def pipeline(cfg: Config):
     logging.info('Data splitted')
        
     # scale data
-    X_train, y_train, X_test = scale_data(X_train, y_train, X_test)
+    X_train, y_train, X_test = scale_data(cfg, X_train, y_train, X_test)
     logging.info('Data scaled')
     
     # user over- or undersampling for scewed data
@@ -50,11 +56,16 @@ def pipeline(cfg: Config):
     compute_perm_feature_importance(model, cfg, X_test, y_test)
     logging.info('Feature evaluated')
 
+    # save experiment results to file
+    save_run_to_pickle(cfg)
+    logging.info('Experiment saved to file')
+    logging.info(f'Experimnet {cfg.run_name} finished')
+    
 
 if __name__ == '__main__':
 
     # Set the logging level to INFO
     logging.basicConfig(level=logging.INFO)
     
-    cfg = Config(model_options.XGBOOST, imb_mode=imb_learn_options.UNDERSAMPLING, scoring='f1', cv_folds=3)
+    cfg = Config('grad_boost_01', model_options.GRAD_BOOST, imb_mode=imb_learn_options.UNDERSAMPLING, scoring='f1', cv_folds=3)
     pipeline(cfg)
