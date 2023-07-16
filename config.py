@@ -3,6 +3,7 @@ from enum import Enum
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import Bunch
+from matplotlib.figure import Figure
 
 imb_learn_options = Enum('smote', 'undersampling')
 model_options = Enum('logistic', 'xgboost')
@@ -85,6 +86,7 @@ class Config:
     recall: float = 0
     f1: float = 0
     auc_roc: float = 0
-    classification_refport: str = ''
-    
+    model_report: str = ''
+    plt_confusion_matrix: Figure
+    plt_roc: Figure
     

@@ -18,9 +18,9 @@ def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_te
     y_pred = model.predict(X_test)
     
     # generate classification report
-    classification_refport = classification_report(y_test, y_pred)
-    cfg.classification_refport = classification_refport
-    print(classification_refport)
+    model_report = classification_report(y_test, y_pred)
+    cfg.model_report = model_report
+    print(model_report)
 
     cfg.accuracy = accuracy_score(y_test, y_pred)
     cfg.precision = precision_score(y_test, y_pred)
@@ -33,24 +33,33 @@ def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_te
     fpr, tpr, _ = roc_curve(y_test, y_prob)
     auc = roc_auc_score(y_test, y_prob)
 
-    plt.plot(fpr, tpr, label='ROC curve (area = {:.2f})'.format(auc))
-    plt.plot([0, 1], [0, 1], 'k--')  # Diagonal line
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC) Curve')
-    plt.legend(loc='lower right')
-    plt.savefig(f'{cfg.path}/roc_curve.png')     
+    fig, ax = plt.subplots()
+
+    ax.plot(fpr, tpr, label='ROC curve (area = {:.2f})'.format(auc))
+    ax.plot([0, 1], [0, 1], 'k--')  # Diagonal line
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.set_title('Receiver Operating Characteristic (ROC) Curve')
+    ax.legend(loc='lower right')
+    fig.savefig(f'{cfg.path}/roc_curve.png')
+    cfg.plt_roc = fig
     plt.cla()
     
     # plot confusion matrix
     cm = confusion_matrix(y_test, y_pred)
 
-    plt.imshow(cm, cmap='Blues', interpolation='nearest')
-    plt.colorbar()
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    plt.xticks([0, 1], ['Negative', 'Positive'])
-    plt.yticks([0, 1], ['Negative', 'Positive'])
-    plt.title('Confusion Matrix')
-    plt.savefig(f'{cfg.path}/confusion_matrix.png')     
+    fig, ax = plt.subplots()
+
+    cax = ax.imshow(cm, cmap='Blues', interpolation='nearest')
+    fig.colorbar(cax)
+
+    ax.set_xlabel('Predicted')
+    ax.set_ylabel('Actual')
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(['Negative', 'Positive'])
+    ax.set_yticks([0, 1])
+    ax.set_yticklabels(['Negative', 'Positive'])
+    ax.set_title('Confusion Matrix')
+    fig.savefig(f'{cfg.path}/confusion_matrix.png')
+    cfg.plt_confusion_matrix = fig
     plt.cla()
