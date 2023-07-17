@@ -14,7 +14,7 @@ class DashboadData:
 
 
 def main():
-    st.title("Introduction")
+    st.title("NYC Bike User Classification Dashboard")
 
     # get session state
     state = st.session_state
@@ -27,15 +27,16 @@ def main():
         }
 
     # render side_bar
-    side_bar()
+    if state.models:
+        side_bar()
 
     # Split the page into two columns
     col1, col2 = st.columns(2)
 
     # Content for the first column
     with col1:
-        st.header("Column 1")
-        st.write("This is the content of column 1.")
+        st.header("Abstract")
+        st.write("Welcome to our NYC Bike User Classification Dashboard! This platform showcases the comprehensive process of classifying user types from the NYC Bike dataset of 2018. This procedure involves several stages including data exploration, data cleaning, feature engineering, model evaluation, live model execution, and an outlook on future improvements.")
 
     # Content for the second column
     with col2:

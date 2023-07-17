@@ -12,14 +12,17 @@ def read_data_to_feather():
     df = pd.concat(df_list)
     df = df.reset_index(drop=True)
     df.to_feather('/workspaces/axa_city_bike/data/raw/2018-citibike-tripdata.feather')
-
+    df.to_csv('/workspaces/axa_city_bike/data/raw/2018-citibike-tripdata.csv', index=False)
+    
+    n_rows = len(df.index)
+    print(f'N rows = {n_rows}')
 
 def create_sample_data_set():
     df = pd.read_feather('data/raw/2018-citibike-tripdata.feather')
     df = df.sample(frac=0.001, random_state=42)
     df = df.reset_index(drop=True)
     df.to_feather('data/raw/2018-citibike-tripdata_xxs.feather')
-    df.to_csv('data/raw/2018-citibike-tripdata_xxs.csv')
+    df.to_csv('data/raw/2018-citibike-tripdata_xxs.csv', index=False)
 
 
 def save_run_to_pickle(cfg: Config) -> None:
@@ -29,4 +32,5 @@ def save_run_to_pickle(cfg: Config) -> None:
         pickle.dump(cfg, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 if __name__ == '__main__':
-    create_sample_data_set()
+    # create_sample_data_set()
+    read_data_to_feather()
