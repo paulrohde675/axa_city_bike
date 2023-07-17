@@ -18,9 +18,9 @@ def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_te
     y_pred = model.predict(X_test)
     
     # generate classification report
-    model_report = classification_report(y_test, y_pred)
-    cfg.model_report = model_report
-    print(model_report)
+    cfg.model_report = classification_report(y_test, y_pred)
+    cfg.model_report_dict = classification_report(y_test, y_pred, output_dict=True)
+    print(cfg.model_report)
 
     cfg.accuracy = accuracy_score(y_test, y_pred)
     cfg.precision = precision_score(y_test, y_pred)

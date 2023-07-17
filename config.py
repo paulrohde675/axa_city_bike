@@ -87,6 +87,7 @@ class Config:
     f1: float = 0
     auc_roc: float = 0
     model_report: str = ''
+    model_report: dict = dict()
     plt_confusion_matrix: Figure
     plt_roc: Figure
     
