@@ -67,5 +67,5 @@ if __name__ == '__main__':
     # Set the logging level to INFO
     logging.basicConfig(level=logging.INFO)
     
-    cfg = Config('rnd_forest_01', model_options.RANDOM_FOREST, imb_mode=imb_learn_options.UNDERSAMPLING, scoring='f1', cv_folds=3)
+    cfg = Config('log_regression_01', model_options.LOGISTIC, imb_mode=imb_learn_options.UNDERSAMPLING, scoring='f1', cv_folds=3)
     pipeline(cfg)

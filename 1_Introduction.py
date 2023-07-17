@@ -22,6 +22,7 @@ def main():
     # add global parameter to session state
     if "models" not in state:
         state.models: dict[str, str] = {
+            'Logistic Regression': 'data/final/log_regression_01',
             'Gradient Boost': 'data/final/grad_boost_01',
             'Random Forest': 'data/final/rnd_forest_01',
         }
