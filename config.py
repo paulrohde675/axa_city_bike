@@ -74,7 +74,7 @@ class Config:
         
     # test data
     X_test: pd.DataFrame = pd.DataFrame()
-    y_test: pd.DataFrame = pd.DataFrame()
+    y_test: pd.Series = pd.Series()
     
     # model
     model: BaseEstimator | None = None

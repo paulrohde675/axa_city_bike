@@ -57,17 +57,18 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
     """ This functions modifies the featurs accroding to the ML method """
     
     # convert datime to more useful features depending on the model type
+    df['day'] = df['starttime'].dt.dayofweek
+    
     if cfg.model_type == model_options.LOGISTIC:
         df['time_elapsed'] = df['starttime'].dt.hour*3600 + df['starttime'].dt.minute*60 + df['starttime'].dt.second
-        df['day_sin'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.sin)
-        df['day_cos'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.cos)
-        df = df.drop(columns=['time_elapsed'])
+        df['time_sin'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.sin)
+        df['time_cos'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.cos)
         
         df['month_sin'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.sin)
         df['month_cos'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.cos)
+        df = df.drop(columns=['time_elapsed'])
         
     elif cfg.model_type == model_options.GRAD_BOOST or cfg.model_type == model_options.RANDOM_FOREST:
-        df['day'] = df['starttime'].dt.dayofweek
         df['month'] = df['starttime'].dt.month
         df['time'] = df['starttime'].dt.hour
         df = pd.get_dummies(df, columns=['gender'], prefix='gender')
@@ -78,17 +79,25 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
     df['usertype'] = df['usertype'].astype(int)
     
     # drop datetimes
-    df = df.drop(columns=['starttime', 'stoptime'])
+    df = df.drop(columns=['starttime', 'stoptime', 'bikeid'])
 
     return df
 
 
-def test_train_split(df: pd.DataFrame, cfg: Config) -> list[pd.DataFrame]:
+def test_train_split(df: pd.DataFrame, cfg: Config) -> list[pd.DataFrame | pd.Series]:
     """ Perfrom the test train split according to the parameter set in config """
     
     y = df['usertype']
     X = df.drop(columns=['usertype'])
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=cfg.test_split, random_state=cfg.random_state)
+    
+    # reset column names
+    X_train = pd.DataFrame(X_train, columns=X.columns)
+    y_train = pd.Series(y_train, name=y.name)
+    X_train = pd.DataFrame(X_train, columns=X.columns)
+    y_train = pd.Series(y_train, name=y.name)    
+    
+    
     
     # save test data
     cfg.X_test = X_test
