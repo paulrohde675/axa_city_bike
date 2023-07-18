@@ -63,25 +63,21 @@ def page_model_evaluation():
     
     st.subheader('Predict a random sample')
 
-    # init values which are filled on btn click
+    # create an initial prediction
     btn = st.button('     Random sample     ')
     if 'event_idx' not in state:
         state.event_idx: int = 42
         predict_from_rnd(state.event_idx)
-        
-    # outcome_bool: bool = True
-    # state.pred_val_str = 'Prediction'
-    # state.true_val_str = 'True value'
-    # state.event_df = pd.DataFrame()
-    
-    # predict a random sample
+
+    # predict a random sample on btn click
     if btn:
         # choose a random sample
         n_events = len(cfg.X_test.index)
         state.event_idx = random.randint(0, n_events-1)
+        
+        # perfrom prediction
         predict_from_rnd(state.event_idx)
     
-
     # Show the event
     st.subheader('Selected sample')
     st.dataframe(state.event_df)
@@ -99,7 +95,7 @@ def page_model_evaluation():
             st.error(state.pred_val_str)
 
     with col2:
-        st.subheader('True Value')
+        st.subheader('True value')
         if state.outcome_bool:
             st.success(state.true_val_str)
         else:
@@ -151,16 +147,12 @@ def page_model_evaluation():
         event = event.drop(columns=['time'])       
         event = event.drop(columns=['month'])    
 
-    print("------")
-    print(event['gender'])
     # scale event
     scaled_event = cfg.scaler.transform(event)
     scaled_event = pd.DataFrame(scaled_event, columns=event.columns)
-    print(scaled_event)
     
     # perform prediction
     pred_val = cfg.model.predict(scaled_event)[0]
-    print(pred_val)
 
     # convert prediction to string (dict would be better!)
     if pred_val == 1:
@@ -170,11 +162,7 @@ def page_model_evaluation():
     else:
         pred_val_str = 'Something Weird'
         
-        
     container.success(pred_val_str)
-    
-    # st.text(f'Model selected {cfg.run_name}')
-    # st.text(cfg.model_report)
     
         
 if __name__ == '__main__':
