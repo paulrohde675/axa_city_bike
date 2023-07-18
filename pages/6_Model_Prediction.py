@@ -52,15 +52,15 @@ def predict_from_rnd(event_idx: int) -> None:
 def page_model_prediction():
     """ On this page, the user can explore the models via live predictions """
     
+    # render side_bar
+    side_bar()
+    
     # get session state and cfg
     cfg: Config = st.session_state.cfg
     state = st.session_state
     st.title("Model Prediction")
     st.markdown('#')
     st.markdown('#')
-    
-    # render side_bar
-    side_bar()
     
     st.subheader('Predict a random sample')
 

@@ -19,10 +19,10 @@ def read_data_to_feather():
 
 def create_sample_data_set():
     df = pd.read_feather('data/raw/2018-citibike-tripdata.feather')
-    df = df.sample(frac=0.25, random_state=42)
+    df = df.sample(frac=0.2, random_state=42)
     df = df.reset_index(drop=True)
-    df.to_feather('data/raw/2018-citibike-tripdata_025.feather')
-    df.to_csv('data/raw/2018-citibike-tripdata_025.csv', index=False)
+    df.to_feather('data/raw/2018-citibike-tripdata_02.feather')
+    df.to_csv('data/raw/2018-citibike-tripdata_02.csv', index=False)
     n_rows = len(df.index)
     print(f'N rows = {n_rows}')
 

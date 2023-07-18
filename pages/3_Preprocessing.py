@@ -4,12 +4,14 @@ from dashboard_sidebar import side_bar
 from config import Config
 
 def page_preprocessing():
+    """ This page shows all preprocessing steps applied to the data"""
     st.title("Preprocessing")
-    state = st.session_state
-    cfg: Config = state.cfg
-
+    
     # render side_bar
     side_bar()
+    
+    state = st.session_state
+    cfg: Config = state.cfg
 
     # clean data
     st.subheader('Clean data')

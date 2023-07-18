@@ -17,7 +17,7 @@ def pipeline(cfg: Config):
         os.makedirs(cfg.path)
     
     # load data
-    df = pd.read_feather('data/raw/2018-citibike-tripdata_025.feather')
+    df = pd.read_feather('data/raw/2018-citibike-tripdata_02.feather')
     logging.info('Data loaded')
     
     # clean data

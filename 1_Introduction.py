@@ -1,16 +1,5 @@
-import pickle
-import sys
 import streamlit as st
-from config import Config
-from sklearn.base import BaseEstimator
-from dataclasses import dataclass
 from dashboard_sidebar import side_bar
-
-@dataclass
-class DashboadData:
-    page: str
-    cfg: Config
-
 
 
 def main():

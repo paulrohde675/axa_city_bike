@@ -1,6 +1,3 @@
-import random
-import math
-import numpy as np
 import pandas as pd
 import streamlit as st
 from config import Config
@@ -10,15 +7,16 @@ from dashboard_sidebar import side_bar
 def page_model_evaluation():
     """ On this page, model evaluations are comapred """
     
-    # get session state and cfg
-    cfg: Config = st.session_state.cfg
-    state = st.session_state
-    st.title("Model Prediction")
-    st.markdown('#')
-    st.markdown('#')
-    
     # render side_bar
     side_bar()
+    
+    # get session state and cfg
+    state = st.session_state
+    cfg: Config = state.cfg
+    
+    st.title("Model Evaluation")
+    st.markdown('#')
+    st.markdown('#')
     
     st.subheader('Statistics')
     report_dict:dict = cfg.model_report_dict
@@ -33,11 +31,23 @@ def page_model_evaluation():
     report_df.index.name = ''
     report_df = report_df.round(2)
     st.dataframe(report_df, width=1000)
-    
-    st.subheader('Confusion matrix')
-    st.pyplot(cfg.plt_confusion_matrix)
+    st.markdown('- **subscriber** are more accurately classified')
+    st.markdown('- **customer** recall is rather low')
+    st.markdown('- **subscriber** f1 score is much higher')
     st.markdown('#')
     
+    # confusion matrix
+    st.subheader('Confusion matrix')
+    st.pyplot(cfg.plt_confusion_matrix)
+    st.markdown('Negative (0) = Customer')
+    st.markdown('Positive (1) = Subscriber')
+    st.markdown("""
+        - the models often misclassify customers as subscriber
+            - these might be cases where customers have other than **unkown** gender
+        """)
+    st.markdown('#')
+    
+    # roc curve
     st.subheader('Roc curve')
     st.pyplot(cfg.plt_roc)
     

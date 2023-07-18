@@ -41,12 +41,12 @@ class Config:
         # Define the hyperparameter grid
         if model_type == model_options.GRAD_BOOST:
             self.hyperparam_grid = {
-                'n_estimators': [50, 100, 150, 200],
-                'learning_rate': [0.1, 0.05, 0.01, 0.005],
-                'max_depth': [3, 5, 7, 9],
-                'min_samples_split': [2, 5, 10, 15],
-                'min_samples_leaf': [1, 2, 5, 10],
-                'max_features': ['sqrt', 'log2', None],
+                'n_estimators': [50, 100, 150],
+                'learning_rate': [0.1, 0.01],
+                'max_depth': [3, 5, 9],
+                'min_samples_split': [2, 7, 15],
+                'min_samples_leaf': [1, 4, 10],
+                'max_features': ['sqrt', None],
                 'subsample': [0.6, 0.8, 1.0]
             }
            

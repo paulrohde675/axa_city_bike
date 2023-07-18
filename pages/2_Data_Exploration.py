@@ -10,11 +10,11 @@ from dashboard_sidebar import side_bar
 @st.cache_data
 def load_dataset(fraction: float = 0.0) -> pd.DataFrame:
     
-    filename = 'data/raw/2018-citibike-tripdata_025.csv'
+    filename = 'data/raw/2018-citibike-tripdata_02.csv'
     
     # Set the number of rows
     #n_rows = 17548339
-    n_rows = 4387085
+    n_rows = 3509668
 
     # Use skiprows to randomly sample the lines
     skip_idx = random.sample(range(1, n_rows), int((1-fraction)*n_rows))
