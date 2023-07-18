@@ -56,9 +56,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
     """ This functions modifies the featurs accroding to the ML method """
     
-    # convert datime to categorical feature
-    df['day'] = df['starttime'].dt.dayofweek
-    
+    # convert datime to more useful features depending on the model type
     if cfg.model_type == model_options.LOGISTIC:
         df['time_elapsed'] = df['starttime'].dt.hour*3600 + df['starttime'].dt.minute*60 + df['starttime'].dt.second
         df['day_sin'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.sin)
@@ -69,6 +67,7 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
         df['month_cos'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.cos)
         
     elif cfg.model_type == model_options.GRAD_BOOST or cfg.model_type == model_options.RANDOM_FOREST:
+        df['day'] = df['starttime'].dt.dayofweek
         df['month'] = df['starttime'].dt.month
         df['time'] = df['starttime'].dt.hour
         df = pd.get_dummies(df, columns=['gender'], prefix='gender')

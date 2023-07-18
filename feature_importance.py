@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 from config import Config
 from sklearn.base import BaseEstimator
 from sklearn.inspection import permutation_importance
@@ -22,21 +23,36 @@ def compute_perm_feature_importance(model: BaseEstimator, cfg: Config, X_test: p
 
     # save feature importance
     cfg.feat_importance = feat_import
-    
+
     # Create plot
-    plt.figure()
+    fig, ax = plt.subplots()
 
     # Create plot title
-    plt.title("Feature Importance")
+    ax.set_title("Feature Importance", fontsize=16)
 
-    # Add bars
-    plt.bar(range(X_test.shape[1]), feat_import.importances_mean[indices])
+    # Add bars with color palette
+    bars = ax.bar(range(X_test.shape[1]), feat_import.importances_mean[indices], color=sns.color_palette("hsv", X_test.shape[1]))
 
     # Add feature names as x-axis labels
-    plt.xticks(range(X_test.shape[1]), X_test.columns, rotation=90)
+    ax.set_xticks(range(X_test.shape[1]))
+    ax.set_xticklabels(X_test.columns[indices], rotation=90, fontsize=12)
+
+    # Increase y-tick font size
+    ax.yaxis.set_tick_params(labelsize=12)
+
+    # Add y-axis label
+    ax.set_ylabel('Importance', fontsize=14)
+
+    # Add grid
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+    # Add padding
+    plt.gcf().subplots_adjust(bottom=0.15)
 
     # Save plot
-    plt.tight_layout()
+    fig.tight_layout()
     plt.savefig(f'{cfg.path}/feature_importance.png')
-    plt.cla()
+    cfg.plt_feat_importance = fig
+    plt.close(fig)
+
     

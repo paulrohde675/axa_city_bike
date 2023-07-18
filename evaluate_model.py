@@ -1,3 +1,4 @@
+import seaborn as sns
 from config import Config
 from sklearn.base import BaseEstimator
 from sklearn.metrics import accuracy_score
@@ -28,38 +29,59 @@ def evaluate_model(model: BaseEstimator, cfg: Config, X_test: pd.DataFrame, y_te
     cfg.f1 = f1_score(y_test, y_pred)
     cfg.auc_roc = roc_auc_score(y_test, y_pred)
     
-    # plot ROC
+    # Plot ROC curve
     y_prob = model.predict_proba(X_test)[:, 1]
     fpr, tpr, _ = roc_curve(y_test, y_prob)
     auc = roc_auc_score(y_test, y_prob)
 
     fig, ax = plt.subplots()
 
-    ax.plot(fpr, tpr, label='ROC curve (area = {:.2f})'.format(auc))
-    ax.plot([0, 1], [0, 1], 'k--')  # Diagonal line
-    ax.set_xlabel('False Positive Rate')
-    ax.set_ylabel('True Positive Rate')
-    ax.set_title('Receiver Operating Characteristic (ROC) Curve')
-    ax.legend(loc='lower right')
-    fig.savefig(f'{cfg.path}/roc_curve.png')
+    ax.plot(fpr, tpr, label='ROC curve (area = {:.2f})'.format(auc), linewidth=2)
+
+    # Diagonal line
+    ax.plot([0, 1], [0, 1], 'k--', linewidth=2)
+
+    # Set labels, title and ticks
+    ax.set_xlabel('False Positive Rate', fontsize=14)
+    ax.set_ylabel('True Positive Rate', fontsize=14)
+    ax.set_title('Receiver Operating Characteristic (ROC) Curve', fontsize=16)
+
+    # Customize legend
+    legend = ax.legend(loc='lower right', fontsize=12, frameon=True)
+    legend.get_frame().set_edgecolor('black')
+
+    # Add grid
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+    # Save plot
+    fig.tight_layout()
+    plt.savefig(f'{cfg.path}/roc_curve.png')
     cfg.plt_roc = fig
-    plt.cla()
+    plt.close(fig)
+
     
     # plot confusion matrix
     cm = confusion_matrix(y_test, y_pred)
 
     fig, ax = plt.subplots()
 
-    cax = ax.imshow(cm, cmap='Blues', interpolation='nearest')
-    fig.colorbar(cax)
+    # Create a heatmap for the confusion matrix
+    cax = sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax, cbar=False, square=True)
 
-    ax.set_xlabel('Predicted')
-    ax.set_ylabel('Actual')
-    ax.set_xticks([0, 1])
-    ax.set_xticklabels(['Negative', 'Positive'])
-    ax.set_yticks([0, 1])
-    ax.set_yticklabels(['Negative', 'Positive'])
-    ax.set_title('Confusion Matrix')
-    fig.savefig(f'{cfg.path}/confusion_matrix.png')
+    # Set labels, title and ticks
+    ax.set_xlabel('Predicted', fontsize=14)
+    ax.set_ylabel('Actual', fontsize=14)
+    ax.set_xticks([0.5, 1.5])
+    ax.set_xticklabels(['Negative', 'Positive'], fontsize=12)
+    ax.set_yticks([0.5, 1.5])
+    ax.set_yticklabels(['Negative', 'Positive'], fontsize=12)
+    ax.set_title('Confusion Matrix', fontsize=16)
+
+    # Add a colorbar
+    fig.colorbar(cax.get_children()[0], ax=ax, orientation="vertical", pad=0.05)
+
+    # Save plot
+    fig.tight_layout()
+    plt.savefig(f'{cfg.path}/confusion_matrix.png')
     cfg.plt_confusion_matrix = fig
-    plt.cla()
+    plt.close(fig)

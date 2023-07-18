@@ -59,7 +59,8 @@ class Config:
         elif model_type == model_options.LOGISTIC:
             self.hyperparam_grid = {
                 'penalty': ['l1', 'l2'],
-                'C': [0.5, 1, 5],
+                'C': [0.1, 0.5, 1, 5, 10],
+                'solver': ['liblinear'],
             } 
         elif model_type == model_options.RANDOM_FOREST:
             self.hyperparam_grid = {
@@ -90,4 +91,5 @@ class Config:
     model_report: dict = dict()
     plt_confusion_matrix: Figure
     plt_roc: Figure
+    plt_feat_importance: Figure
     
