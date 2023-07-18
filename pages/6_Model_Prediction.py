@@ -8,7 +8,7 @@ from config import model_options
 from dashboard_sidebar import side_bar
 
 def predict_from_rnd(event_idx: int) -> None:
-        """ make a prediction from a random index """
+        """ Make a prediction from a random index """
     
         # get session state and cfg
         cfg: Config = st.session_state.cfg
@@ -49,14 +49,15 @@ def predict_from_rnd(event_idx: int) -> None:
         else:
             state.true_val_str = 'Something Weird'
 
-def page_model_evaluation():
-    cfg: Config = st.session_state.cfg
-    st.title("Model Evaluation")
-    st.markdown('#')
-    st.markdown('#')
+def page_model_prediction():
+    """ On this page, the user can explore the models via live predictions """
     
-    # get session state
+    # get session state and cfg
+    cfg: Config = st.session_state.cfg
     state = st.session_state
+    st.title("Model Prediction")
+    st.markdown('#')
+    st.markdown('#')
     
     # render side_bar
     side_bar()
@@ -166,4 +167,4 @@ def page_model_evaluation():
     
         
 if __name__ == '__main__':
-    page_model_evaluation()
+    page_model_prediction()

@@ -19,11 +19,12 @@ def read_data_to_feather():
 
 def create_sample_data_set():
     df = pd.read_feather('data/raw/2018-citibike-tripdata.feather')
-    df = df.sample(frac=0.001, random_state=42)
+    df = df.sample(frac=0.25, random_state=42)
     df = df.reset_index(drop=True)
-    df.to_feather('data/raw/2018-citibike-tripdata_xxs.feather')
-    df.to_csv('data/raw/2018-citibike-tripdata_xxs.csv', index=False)
-
+    df.to_feather('data/raw/2018-citibike-tripdata_025.feather')
+    df.to_csv('data/raw/2018-citibike-tripdata_025.csv', index=False)
+    n_rows = len(df.index)
+    print(f'N rows = {n_rows}')
 
 def save_run_to_pickle(cfg: Config) -> None:
     """ Save the config file with all experment parameter and results to file using pickle """
@@ -32,5 +33,5 @@ def save_run_to_pickle(cfg: Config) -> None:
         pickle.dump(cfg, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 if __name__ == '__main__':
-    # create_sample_data_set()
-    read_data_to_feather()
+    create_sample_data_set()
+    # read_data_to_feather()

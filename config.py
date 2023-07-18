@@ -40,27 +40,21 @@ class Config:
         
         # Define the hyperparameter grid
         if model_type == model_options.GRAD_BOOST:
-        #    self.hyperparam_grid = {
-        #         "loss":["log_loss"],
-        #         "learning_rate": [0.01], #0.01,  , 0.2
-        #         "min_samples_split": np.linspace(0.1, 0.5, 2),
-        #         "min_samples_leaf": np.linspace(0.1, 0.5, 2),
-        #         "max_depth":[3, 5], #3,5,8
-        #         "max_features":["sqrt"], #,"sqrt"
-        #         "criterion": ["friedman_mse"], #,  "mae"
-        #         "subsample":[0.5, 0.75, 1.0], # [0.5, 0.75, 1.0],
-        #         "n_estimators":[10]
-        #     }  
             self.hyperparam_grid = {
-                'n_estimators': [50, 75],
-                'learning_rate': [0.1] # , 0.01
+                'n_estimators': [50, 100, 150, 200],
+                'learning_rate': [0.1, 0.05, 0.01, 0.005],
+                'max_depth': [3, 5, 7, 9],
+                'min_samples_split': [2, 5, 10, 15],
+                'min_samples_leaf': [1, 2, 5, 10],
+                'max_features': ['sqrt', 'log2', None],
+                'subsample': [0.6, 0.8, 1.0]
             }
            
         elif model_type == model_options.LOGISTIC:
             self.hyperparam_grid = {
                 'penalty': ['l1', 'l2', 'elasticnet'],
                 'C': [0.1, 0.5, 1, 5, 10],
-                'solver': ['liblinear'],
+                'solver': ['saga'], #'liblinear', 
             } 
         elif model_type == model_options.RANDOM_FOREST:
             self.hyperparam_grid = {
@@ -88,7 +82,7 @@ class Config:
     f1: float = 0
     auc_roc: float = 0
     model_report: str = ''
-    model_report: dict = dict()
+    model_report_dict: dict = dict()
     plt_confusion_matrix: Figure
     plt_roc: Figure
     plt_feat_importance: Figure
