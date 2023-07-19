@@ -46,8 +46,8 @@ class Config:
                 'max_depth': [3, 5, 9],
                 'min_samples_split': [2, 7, 15],
                 'min_samples_leaf': [1, 4, 10],
-                'max_features': ['sqrt', None],
-                'subsample': [0.6, 0.8, 1.0]
+                'max_features': ['sqrt'],
+                'subsample': [0.6, 1.0]
             }
            
         elif model_type == model_options.LOGISTIC:
