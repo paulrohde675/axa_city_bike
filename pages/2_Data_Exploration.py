@@ -4,7 +4,6 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import streamlit_toggle as tog
-from matplotlib.figure import Figure
 from dashboard_sidebar import side_bar
 
 

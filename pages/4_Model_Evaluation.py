@@ -28,6 +28,11 @@ def page_model_evaluation():
     )
     st.markdown("#")
 
+    st.subheader("Model parameter")
+    params_df = pd.DataFrame(cfg.model.get_params(), index=[1])
+    st.dataframe(params_df)
+    st.markdown("#")
+
     st.subheader("Statistics")
     report_dict: dict = cfg.model_report_dict
     if "accuracy" in report_dict:
