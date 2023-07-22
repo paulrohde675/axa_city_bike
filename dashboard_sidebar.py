@@ -30,6 +30,9 @@ def side_bar() -> None:
             'Logistic Regression': 'data/final/log_regression_01',
             'Gradient Boost': 'data/final/grad_boost_01',
             'Random Forest': 'data/final/rnd_forest_01',
+            'SVM': 'data/final/svm_01',
+            'Naive Bayes': 'data/final/naive_bayes_01',
+            'Neural Network': 'data/final/neural_network_01',
         }    
     
     # Create a sidebar for model selection

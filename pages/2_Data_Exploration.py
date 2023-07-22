@@ -155,18 +155,20 @@ def page_data_exploration():
     
     # Distribution Plots
     st.subheader('Plot distributions')
-    numeric_columns = df.select_dtypes(include=['int64', 'float64', 'int32']).columns
-    col = st.selectbox("Select column", numeric_columns)
-    bins = st.slider('Number of bins', min_value=5, max_value=100, value=30, step=5)
-    min_val = df[col].min()
-    max_val = df[col].max()
-    values = st.slider(
-        'Select a range of values',
-        0.0, 100.0, (25.0, 75.0))
-    st.write('Values:', values)
     
-    min_max = st.slider('Number of bins', min_value=min_val, max_value=max_val, value=(min_val, max_val))
-    print(min_max)
+    # user input
+    numeric_columns = df.select_dtypes(include=['int64', 'float64', 'int32']).columns
+    col = st.selectbox("Select Feature", numeric_columns)
+    bins = st.slider('Number of bins', min_value=5, max_value=100, value=30, step=5)
+    min_val = float(df[col].min())
+    max_val = float(df[col].max())*1.05
+    min_val = min_val -0.05*max_val
+    max_val = max_val +0.05*max_val
+    
+    min_max = st.slider('Min / Max values', min_value=min_val, max_value=max_val, value=(min_val, max_val))
+    
+    # filter min max values
+    df = df[(df[col] > min_max[0]) & (df[col] < min_max[1])]
     
     # Split the page into two columns
     col1, col2 = st.columns(2)
@@ -174,6 +176,7 @@ def page_data_exploration():
     # distribution of usertype
     customer_types_list = []
     with col1:
+        st.subheader('Select Target')
         customer = tog.st_toggle_switch(label="Customer")
         subscriber = tog.st_toggle_switch(label="Subscriber")
         
@@ -186,11 +189,13 @@ def page_data_exploration():
             customer_types_list.append("Customer")
         
     with col2:
+        st.subheader('Plot Scale')
         log = tog.st_toggle_switch(label="Logarithmic scale")
     
     fig = create_dis_figure(df, col, 'usertype', customer_types_list, log, bins)
     st.pyplot(fig)
     
+    st.markdown("- **Customer** have exeptionally often 1969 as birth year")
     st.markdown("- **tripduration** longer than a day")
     st.markdown("- **tripduration** shorter than a minute") 
     st.markdown("- **longitude** and latitude that are very distant") 

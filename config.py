@@ -17,6 +17,8 @@ class model_options(Enum):
     GRAD_BOOST = 'grad_boost'
     RANDOM_FOREST = 'random_forest'
     SVM = 'svm'
+    NAIV_BAYES = 'naive_bayes'
+    NEURAL_NETWORK = 'neural_network'
 
 class Config:
     
@@ -73,6 +75,18 @@ class Config:
                 'penalty': ['l2'],
                 'dual': [True, False],
                 'tol': [1e-4, 1e-3],
+            }
+        elif model_type == model_options.NAIV_BAYES:
+            self.hyperparam_grid = {
+                'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]
+            }
+        elif model_type == model_options.NEURAL_NETWORK:
+            self.hyperparam_grid = {
+                'hidden_layer_sizes': [(2,), (10,), (50,), (100,)],
+                'activation': ['relu'], #'tanh', 
+                'solver': ['adam'], # 'sgd', 
+                'alpha': [0.0001, 0.01, 1.0],
+                'learning_rate': ['constant','adaptive'],
             }
         
         

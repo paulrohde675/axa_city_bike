@@ -59,7 +59,10 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
     # convert datime to more useful features depending on the model type
     df['day'] = df['starttime'].dt.dayofweek
     
-    if cfg.model_type == model_options.LOGISTIC or cfg.model_type == model_options.SVM:
+    if (cfg.model_type == model_options.LOGISTIC or
+        cfg.model_type == model_options.SVM or
+        cfg.model_type == model_options.NEURAL_NETWORK):
+        
         df['time_elapsed'] = df['starttime'].dt.hour*3600 + df['starttime'].dt.minute*60 + df['starttime'].dt.second
         df['time_sin'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.sin)
         df['time_cos'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.cos)
@@ -68,7 +71,10 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
         df['month_cos'] = (2 * np.pi * df['starttime'].dt.month / 12).apply(math.cos)
         df = df.drop(columns=['time_elapsed'])
         
-    elif cfg.model_type == model_options.GRAD_BOOST or cfg.model_type == model_options.RANDOM_FOREST:
+    elif (cfg.model_type == model_options.GRAD_BOOST or
+         cfg.model_type == model_options.RANDOM_FOREST or
+         cfg.model_type == model_options.NAIV_BAYES):
+        
         df['month'] = df['starttime'].dt.month
         df['time'] = df['starttime'].dt.hour
         df = pd.get_dummies(df, columns=['gender'], prefix='gender')

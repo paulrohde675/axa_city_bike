@@ -131,13 +131,14 @@ def page_model_prediction():
         'end_station_long': end_station_long,
         'birth_year': birth_year,
         'gender': gender,
-        #'time': time,
         'day': day,
-        #'month': month,
     }, index=[0])
     
     # account for model type
-    if cfg.model_type.value == model_options.LOGISTIC.value or cfg.model_type == model_options.SVM:
+    if (cfg.model_type.value == model_options.LOGISTIC.value or
+        cfg.model_type == model_options.SVM or
+        cfg.model_type == model_options.NEURAL_NETWORK):
+        
         event['time_elapsed'] = time*3600
         event['time_sin'] = (2 * np.pi * event['time_elapsed'] / 86400).apply(math.sin)
         event['time_cos'] = (2 * np.pi * event['time_elapsed'] / 86400).apply(math.cos)
@@ -145,10 +146,11 @@ def page_model_prediction():
         event['month_sin'] = math.sin(2 * np.pi * month / 12)
         event['month_cos'] = math.cos(2 * np.pi * month / 12)
         event = event.drop(columns=['time_elapsed'])       
-        #event = event.drop(columns=['time'])       
-        #event = event.drop(columns=['month'])    
 
-    elif cfg.model_type == model_options.GRAD_BOOST or cfg.model_type == model_options.RANDOM_FOREST:
+    elif (cfg.model_type == model_options.GRAD_BOOST or
+          cfg.model_type == model_options.RANDOM_FOREST or
+          cfg.model_type == model_options.NAIV_BAYES):
+        
         event['month'] = month
         event['time'] = time
         if event['gender'].values[0] == 0:

@@ -6,6 +6,8 @@ from config import Config
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 from config import model_options
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
 
 def init_model(cfg: Config) -> BaseEstimator:
     """ Initilizes the classification model depending on the parameter set in config """
@@ -21,6 +23,13 @@ def init_model(cfg: Config) -> BaseEstimator:
     
     elif cfg.model_type == model_options.SVM:
         return LinearSVC()
+
+    elif cfg.model_type == model_options.NAIV_BAYES:
+        return GaussianNB()
+    
+    elif cfg.model_type == model_options.NEURAL_NETWORK:
+        return MLPClassifier()
+
 
 def train_model(model: BaseEstimator, 
                 cfg: Config, 
