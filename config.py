@@ -64,7 +64,7 @@ class Config:
             }
         elif model_type == model_options.RANDOM_FOREST:
             self.hyperparam_grid = {
-                "n_estimators": [50, 100, 150],
+                "n_estimators": [50, 100],
                 "max_depth": [5, 9, None],
                 "min_samples_split": [2, 8],
                 "min_samples_leaf": [1, 5],
