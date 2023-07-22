@@ -131,23 +131,41 @@ def page_model_prediction():
         'end_station_long': end_station_long,
         'birth_year': birth_year,
         'gender': gender,
-        'time': time,
+        #'time': time,
         'day': day,
-        'month': month,
+        #'month': month,
     }, index=[0])
     
     # account for model type
-    if cfg.model_type.value == model_options.LOGISTIC.value:
-        event['time_elapsed'] = event['time']*3600
+    if cfg.model_type.value == model_options.LOGISTIC.value or cfg.model_type == model_options.SVM:
+        event['time_elapsed'] = time*3600
         event['time_sin'] = (2 * np.pi * event['time_elapsed'] / 86400).apply(math.sin)
         event['time_cos'] = (2 * np.pi * event['time_elapsed'] / 86400).apply(math.cos)
         
-        event['month_sin'] = (2 * np.pi * event['month'] / 12).apply(math.sin)
-        event['month_cos'] = (2 * np.pi * event['month'] / 12).apply(math.cos)
+        event['month_sin'] = math.sin(2 * np.pi * month / 12)
+        event['month_cos'] = math.cos(2 * np.pi * month / 12)
         event = event.drop(columns=['time_elapsed'])       
-        event = event.drop(columns=['time'])       
-        event = event.drop(columns=['month'])    
+        #event = event.drop(columns=['time'])       
+        #event = event.drop(columns=['month'])    
 
+    elif cfg.model_type == model_options.GRAD_BOOST or cfg.model_type == model_options.RANDOM_FOREST:
+        event['month'] = month
+        event['time'] = time
+        if event['gender'].values[0] == 0:
+            event['gender_0'] = 1
+            event['gender_1'] = 0
+            event['gender_2'] = 0
+        elif event['gender'].values[0] == 1:
+            event['gender_0'] = 0
+            event['gender_1'] = 1
+            event['gender_2'] = 0
+        elif event['gender'].values[0] == 2:
+            event['gender_0'] = 0
+            event['gender_1'] = 0
+            event['gender_2'] = 1
+        event = event.drop(columns=['gender'])   
+        print(event)
+                    
     # scale event
     scaled_event = cfg.scaler.transform(event)
     scaled_event = pd.DataFrame(scaled_event, columns=event.columns)

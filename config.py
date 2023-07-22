@@ -16,6 +16,7 @@ class model_options(Enum):
     LOGISTIC = 'logistic'
     GRAD_BOOST = 'grad_boost'
     RANDOM_FOREST = 'random_forest'
+    SVM = 'svm'
 
 class Config:
     
@@ -44,8 +45,8 @@ class Config:
                 'n_estimators': [50, 100, 150],
                 'learning_rate': [0.1, 0.01],
                 'max_depth': [3, 5, 9],
-                'min_samples_split': [2, 7, 15],
-                'min_samples_leaf': [1, 4, 10],
+                'min_samples_split': [2, 8],
+                'min_samples_leaf': [1, 5],
                 'max_features': ['sqrt'],
                 'subsample': [0.6, 1.0]
             }
@@ -58,13 +59,20 @@ class Config:
             } 
         elif model_type == model_options.RANDOM_FOREST:
             self.hyperparam_grid = {
-                'bootstrap': [False], #, False
-                'max_depth': [10, 50],  #, 20, 30, 40, 50, 100, 60, 70, 80, 90, , None
-                'max_features': ['sqrt'], #'auto', 
-                'min_samples_leaf': [1, 2], #1, 2, 4
-                'min_samples_split': [2, 5],#2, 5, 10
-                'n_estimators': [2, 5, 10] #200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000
+                'n_estimators': [50, 100, 150],
+                'max_depth': [5, 9, None],
+                'min_samples_split': [2, 8],
+                'min_samples_leaf': [1, 5],
+                'max_features': ['sqrt'],
+                'bootstrap': [True, False]
             }
+        elif model_type == model_options.SVM:
+            self.hyperparam_grid = {
+                'C': [0.1, 1, 10, 100],
+                'gamma': ['scale', 'auto'],
+                'kernel': ['linear', 'rbf'],
+            }
+        
         
     # test data
     X_test: pd.DataFrame = pd.DataFrame()

@@ -4,6 +4,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.base import BaseEstimator
 from config import Config
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from config import model_options
 
 def init_model(cfg: Config) -> BaseEstimator:
@@ -18,6 +19,8 @@ def init_model(cfg: Config) -> BaseEstimator:
     elif cfg.model_type == model_options.RANDOM_FOREST:
         return RandomForestClassifier()
     
+    elif cfg.model_type == model_options.SVM:
+        return SVC()
 
 def train_model(model: BaseEstimator, 
                 cfg: Config, 

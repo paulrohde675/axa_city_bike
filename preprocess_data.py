@@ -59,7 +59,7 @@ def mod_feature(df: pd.DataFrame, cfg: Config) -> pd.DataFrame:
     # convert datime to more useful features depending on the model type
     df['day'] = df['starttime'].dt.dayofweek
     
-    if cfg.model_type == model_options.LOGISTIC:
+    if cfg.model_type == model_options.LOGISTIC or cfg.model_type == model_options.SVM:
         df['time_elapsed'] = df['starttime'].dt.hour*3600 + df['starttime'].dt.minute*60 + df['starttime'].dt.second
         df['time_sin'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.sin)
         df['time_cos'] = (2 * np.pi * df['time_elapsed'] / 86400).apply(math.cos)
