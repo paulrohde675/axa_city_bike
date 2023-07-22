@@ -25,21 +25,27 @@ def load_dataset(fraction: float = 0.0) -> pd.DataFrame:
     return df
 
 @st.cache_data
-def create_dis_figure(df: pd.DataFrame, col: str, log: bool, bins: int) -> Figure:
+def create_dis_figure(df: pd.DataFrame, col: str, class_col: str = None, class_val: list = None, log: bool = False, bins: int = 10) -> plt.Figure:
     fig, ax = plt.subplots(figsize=(8,5))
 
-    if log:
-        df[col].hist(bins=bins)
-        ax.set_xlabel(col)
-        ax.set_ylabel("log counts")
-        ax.set_yscale('log')
+    if class_col and class_val:
+        n = len(class_val)
+        data = []
+        for i, val in enumerate(class_val):
+            subset = df[df[class_col] == val]
+            data.append(subset[col].values)
 
+        ax.hist(data, bins=bins, stacked=True, label=class_val)
     else:
         df[col].hist(bins=bins)
-        ax.set_xlabel(col)
-        ax.set_ylabel("counts")
-    
-    
+
+    if log:
+        ax.set_yscale('log')
+
+    ax.set_xlabel(col)
+    ax.set_ylabel("log counts" if log else "counts")
+    ax.legend()
+
     fig.tight_layout()
     return fig
 
@@ -147,13 +153,42 @@ def page_data_exploration():
     st.markdown("- **Subscribers** have only few unkwon observations") 
     st.markdown('#')
     
+    # Distribution Plots
     st.subheader('Plot distributions')
     numeric_columns = df.select_dtypes(include=['int64', 'float64', 'int32']).columns
     col = st.selectbox("Select column", numeric_columns)
     bins = st.slider('Number of bins', min_value=5, max_value=100, value=30, step=5)
-    log = tog.st_toggle_switch(label="Logarithmic scale")
+    min_val = df[col].min()
+    max_val = df[col].max()
+    values = st.slider(
+        'Select a range of values',
+        0.0, 100.0, (25.0, 75.0))
+    st.write('Values:', values)
     
-    fig = create_dis_figure(df, col, log, bins)
+    min_max = st.slider('Number of bins', min_value=min_val, max_value=max_val, value=(min_val, max_val))
+    print(min_max)
+    
+    # Split the page into two columns
+    col1, col2 = st.columns(2)
+
+    # distribution of usertype
+    customer_types_list = []
+    with col1:
+        customer = tog.st_toggle_switch(label="Customer")
+        subscriber = tog.st_toggle_switch(label="Subscriber")
+        
+        if customer:
+            customer_types_list.append("Customer")
+        if subscriber:
+            customer_types_list.append("Subscriber")  
+        if len(customer_types_list) == 0:
+            customer_types_list.append("Subscriber")  
+            customer_types_list.append("Customer")
+        
+    with col2:
+        log = tog.st_toggle_switch(label="Logarithmic scale")
+    
+    fig = create_dis_figure(df, col, 'usertype', customer_types_list, log, bins)
     st.pyplot(fig)
     
     st.markdown("- **tripduration** longer than a day")

@@ -69,8 +69,10 @@ class Config:
         elif model_type == model_options.SVM:
             self.hyperparam_grid = {
                 'C': [0.1, 1, 10, 100],
-                'gamma': ['scale', 'auto'],
-                'kernel': ['linear', 'rbf'],
+                'loss': ['hinge', 'squared_hinge'],
+                'penalty': ['l2'],
+                'dual': [True, False],
+                'tol': [1e-4, 1e-3],
             }
         
         
