@@ -1,7 +1,8 @@
-import streamlit as st
 import pandas as pd
-from dashboard_sidebar import side_bar
+import streamlit as st
+
 from config import Config
+from dashboard_sidebar import side_bar
 
 
 def page_preprocessing():

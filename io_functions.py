@@ -1,5 +1,7 @@
-import pandas as pd
 import pickle
+
+import pandas as pd
+
 from config import Config
 
 

@@ -1,11 +1,15 @@
-import pandas as pd
-import numpy as np
 import math
+
+import numpy as np
+import pandas as pd
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
-from config import Config, imb_learn_options, model_options
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+
+from config import Config
+from config import imb_learn_options
+from config import model_options
 
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:

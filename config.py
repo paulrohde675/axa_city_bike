@@ -1,9 +1,10 @@
-import pandas as pd
 from enum import Enum
+
+import pandas as pd
+from matplotlib.figure import Figure
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import Bunch
-from matplotlib.figure import Figure
 
 imb_learn_options = Enum("smote", "undersampling")
 model_options = Enum("logistic", "xgboost")

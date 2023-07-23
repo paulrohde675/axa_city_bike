@@ -1,13 +1,15 @@
 import pandas as pd
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
 from sklearn.base import BaseEstimator
-from config import Config
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.svm import LinearSVC
-from config import model_options
+from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
+from sklearn.svm import LinearSVC
+
+from config import Config
+from config import model_options
 
 
 def init_model(cfg: Config) -> BaseEstimator:

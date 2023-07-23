@@ -1,10 +1,11 @@
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import seaborn as sns
-from config import Config
 from sklearn.base import BaseEstimator
 from sklearn.inspection import permutation_importance
+
+from config import Config
 
 
 def compute_perm_feature_importance(
@@ -38,7 +39,7 @@ def compute_perm_feature_importance(
     ax.set_title("Feature Importance", fontsize=16)
 
     # Add bars with color palette
-    bars = ax.bar(
+    ax.bar(
         range(X_test.shape[1]),
         feat_import.importances_mean[indices],
         color=sns.color_palette("hsv", X_test.shape[1]),

@@ -1,9 +1,11 @@
 import random
-import streamlit as st
+
+import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
+import streamlit as st
 import streamlit_toggle as tog
+
 from dashboard_sidebar import side_bar
 
 
