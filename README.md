@@ -1,4 +1,4 @@
-# axa_city_bike
+# NYC_Bike
 
 ## Init project
 
