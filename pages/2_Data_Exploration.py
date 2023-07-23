@@ -83,8 +83,8 @@ def page_data_exploration():
         step=0.05,
     )
     df = load_dataset(fraction)
-    st.write("Total number of rwos = 17548339")
-    st.write(f"Number of rwos loaded = {len(df.index)}")
+    st.write("Total number of rows = 17548339")
+    st.write(f"Number of rows loaded = {len(df.index)}")
     st.markdown("#")
 
     # Show the first few rows of the dataset
@@ -93,7 +93,7 @@ def page_data_exploration():
 
     st.markdown("- **usertype** is the target variable")
     st.markdown("- **start/stop time** include dates and times")
-    st.markdown("- **start/stop time** is in seconds")
+    st.markdown("- **tripduration** is in seconds")
     st.markdown("- **station names** can be dropped")
     st.markdown("- **bikeid** can be dropped")
     st.markdown("#")
@@ -106,7 +106,6 @@ def page_data_exploration():
 
     st.markdown("- **usertype** is a string an needs to be converted")
     st.markdown("- **start/stop times** are strings and need to be converted")
-    st.markdown("- **start/stop station id** are strings and need to be converted")
     st.markdown("#")
 
     # Check for missing values
@@ -183,15 +182,13 @@ def page_data_exploration():
     col = st.selectbox("Select Feature", numeric_columns)
     bins = st.slider("Number of bins", min_value=5, max_value=100, value=30, step=5)
     min_val = float(df[col].min())
-    max_val = float(df[col].max()) * 1.05
-    min_val = min_val - 0.05 * max_val
-    max_val = max_val + 0.05 * max_val
-
+    max_val = float(df[col].max())
+    
     min_max = st.slider(
         "Min / Max values",
         min_value=min_val,
         max_value=max_val,
-        value=(min_val, max_val),
+        value=(min_val-0.000001, max_val+0.000001),
     )
 
     # filter min max values

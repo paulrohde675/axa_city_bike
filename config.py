@@ -64,19 +64,18 @@ class Config:
             }
         elif model_type == model_options.RANDOM_FOREST:
             self.hyperparam_grid = {
-                "n_estimators": [50, 100],
-                "max_depth": [5, 9, None],
-                "min_samples_split": [2, 8],
-                "min_samples_leaf": [1, 5],
+                "n_estimators": [100], #50, 
+                "max_depth": [None], # 5, 9, 
+                "min_samples_split": [2], #, 8
+                "min_samples_leaf": [1], #, 5
                 "max_features": ["sqrt"],
-                "bootstrap": [True, False],
+                "bootstrap": [False], # True, 
             }
         elif model_type == model_options.SVM:
             self.hyperparam_grid = {
                 "C": [0.1, 1, 10, 100],
-                "loss": ["hinge", "squared_hinge"],
+                "loss": ["hinge"],
                 "penalty": ["l2"],
-                "dual": [True, False],
                 "tol": [1e-4, 1e-3],
             }
         elif model_type == model_options.NAIV_BAYES:
