@@ -74,8 +74,8 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     cfg = Config(
-        "rnd_forest_01",
-        model_options.RANDOM_FOREST,
+        "svm_01",
+        model_options.SVM,
         imb_mode=imb_learn_options.UNDERSAMPLING,
         scoring="f1",
         cv_folds=5,

@@ -60,7 +60,7 @@ class Config:
             self.hyperparam_grid = {
                 "penalty": ["l1", "l2", "elasticnet"],
                 "C": [0.1, 0.5, 1, 5, 10],
-                "solver": ["saga"],  #'liblinear',
+                "solver": ["saga"],
             }
         elif model_type == model_options.RANDOM_FOREST:
             self.hyperparam_grid = {
