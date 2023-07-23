@@ -40,13 +40,13 @@ def page_outlook():
             - average velocity might correlate with fintess and health
             - start / stop locations might correspond to the customers home / workplace
                 - might be interessting to double check the insurance company data
-        - fraut
-            - the insurance compy might inform NYC Bike about fraut risks
+        - fraud
+            - the insurance compy might inform NYC Bike about fraud risks
         - customer benefits
-            - customer is inshured while riding if he is a customer of the insurance company
+            - customer is insured while riding if he is a customer of the insurance company
             - free rides if the customer is also customer of the insurance company
         - insurance
-            - insuranc of the bikes
+            - insurance of the bikes
         """
     )
 

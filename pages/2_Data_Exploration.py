@@ -172,8 +172,8 @@ def page_data_exploration():
     st.pyplot(fig)
     plt.cla()
 
-    st.markdown("- most of the **Customers** are unkown")
-    st.markdown("- **Subscribers** have only few unkwon observations")
+    st.markdown("- most of the **Customers** are unknown")
+    st.markdown("- **Subscribers** have only few unknown observations")
     st.markdown("#")
 
     # Distribution Plots
