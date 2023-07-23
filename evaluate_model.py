@@ -1,5 +1,6 @@
 import seaborn as sns
 from config import Config
+from config import model_options
 from sklearn.base import BaseEstimator
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
@@ -32,36 +33,6 @@ def evaluate_model(
     cfg.f1 = f1_score(y_test, y_pred)
     cfg.auc_roc = roc_auc_score(y_test, y_pred)
 
-    # Plot ROC curve
-    y_prob = model.predict_proba(X_test)[:, 1]
-    fpr, tpr, _ = roc_curve(y_test, y_prob)
-    auc = roc_auc_score(y_test, y_prob)
-
-    fig, ax = plt.subplots()
-
-    ax.plot(fpr, tpr, label="ROC curve (area = {:.2f})".format(auc), linewidth=2)
-
-    # Diagonal line
-    ax.plot([0, 1], [0, 1], "k--", linewidth=2)
-
-    # Set labels, title and ticks
-    ax.set_xlabel("False Positive Rate", fontsize=14)
-    ax.set_ylabel("True Positive Rate", fontsize=14)
-    ax.set_title("Receiver Operating Characteristic (ROC) Curve", fontsize=16)
-
-    # Customize legend
-    legend = ax.legend(loc="lower right", fontsize=12, frameon=True)
-    legend.get_frame().set_edgecolor("black")
-
-    # Add grid
-    ax.grid(True, linestyle="--", alpha=0.6)
-
-    # Save plot
-    fig.tight_layout()
-    plt.savefig(f"{cfg.path}/roc_curve.png")
-    cfg.plt_roc = fig
-    plt.close(fig)
-
     # plot confusion matrix
     cm = confusion_matrix(y_test, y_pred)
 
@@ -89,3 +60,34 @@ def evaluate_model(
     plt.savefig(f"{cfg.path}/confusion_matrix.png")
     cfg.plt_confusion_matrix = fig
     plt.close(fig)
+
+    # Plot ROC curve
+    fig, ax = plt.subplots()
+    
+    if cfg.model_type != model_options.SVM:
+        y_prob = model.predict_proba(X_test)[:, 1]
+        fpr, tpr, _ = roc_curve(y_test, y_prob)
+        auc = roc_auc_score(y_test, y_prob)
+        ax.plot(fpr, tpr, label="ROC curve (area = {:.2f})".format(auc), linewidth=2)
+
+    # Diagonal line
+    ax.plot([0, 1], [0, 1], "k--", linewidth=2)
+
+    # Set labels, title and ticks
+    ax.set_xlabel("False Positive Rate", fontsize=14)
+    ax.set_ylabel("True Positive Rate", fontsize=14)
+    ax.set_title("Receiver Operating Characteristic (ROC) Curve", fontsize=16)
+
+    # Customize legend
+    legend = ax.legend(loc="lower right", fontsize=12, frameon=True)
+    legend.get_frame().set_edgecolor("black")
+
+    # Add grid
+    ax.grid(True, linestyle="--", alpha=0.6)
+
+    # Save plot
+    fig.tight_layout()
+    plt.savefig(f"{cfg.path}/roc_curve.png")
+    cfg.plt_roc = fig
+    plt.close(fig)
+

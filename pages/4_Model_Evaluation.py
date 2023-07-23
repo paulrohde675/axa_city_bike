@@ -65,8 +65,9 @@ def page_model_evaluation():
     st.markdown("#")
 
     # roc curve
-    st.subheader("Roc curve")
-    st.pyplot(cfg.plt_roc)
+    if cfg.model_type != model_options.SVM:
+        st.subheader("Roc curve")
+        st.pyplot(cfg.plt_roc)
 
 
 if __name__ == "__main__":
