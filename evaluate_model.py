@@ -64,7 +64,7 @@ def evaluate_model(
 
     # Plot ROC curve
     fig, ax = plt.subplots()
-    
+
     if cfg.model_type != model_options.SVM:
         y_prob = model.predict_proba(X_test)[:, 1]
         fpr, tpr, _ = roc_curve(y_test, y_prob)

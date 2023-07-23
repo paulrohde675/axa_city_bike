@@ -8,15 +8,16 @@ from dashboard_sidebar import side_bar
 def page_preprocessing():
     """This page shows all preprocessing steps applied to the data"""
     st.title("Preprocessing")
-    st.markdown('#')
-    st.write("""Data preprocessing is essential for model success. The first step is cleaning data 
+    st.markdown("#")
+    st.write(
+        """Data preprocessing is essential for model success. The first step is cleaning data 
              to remove inconsistencies and outliers, followed by feature engineering to create 
              meaningful attributes like rider age and time of day. We then partitioned the data into 
              training and test sets for model validation. Lastly, we addressed class imbalance through 
              techniques like over-sampling and under-sampling to avoid model bias.
-             """)
-    st.markdown('#')
-
+             """
+    )
+    st.markdown("#")
 
     # render side_bar
     side_bar()

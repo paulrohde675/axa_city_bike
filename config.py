@@ -65,12 +65,12 @@ class Config:
             }
         elif model_type == model_options.RANDOM_FOREST:
             self.hyperparam_grid = {
-                "n_estimators": [100], #50, 
-                "max_depth": [None], # 5, 9, 
-                "min_samples_split": [2], #, 8
-                "min_samples_leaf": [1], #, 5
+                "n_estimators": [100],  # 50,
+                "max_depth": [None],  # 5, 9,
+                "min_samples_split": [2],  # , 8
+                "min_samples_leaf": [1],  # , 5
                 "max_features": ["sqrt"],
-                "bootstrap": [False], # True, 
+                "bootstrap": [False],  # True,
             }
         elif model_type == model_options.SVM:
             self.hyperparam_grid = {

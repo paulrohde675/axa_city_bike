@@ -37,16 +37,18 @@ def side_bar() -> None:
             "Naive Bayes": "data/final/naive_bayes_01",
             "Neural Network": "data/final/neural_network_01",
         }
-        
+
     if "selected_model" not in state:
         state.selected_model = "Logistic Regression"
 
     # Create a sidebar for model selection
     st.sidebar.title("Model Selection")
-    
+
     # List of model names
     model_names = list(state.models.keys())
     current_idx = model_names.index(state.selected_model)
-    state.selected_model = st.sidebar.selectbox("Select a model", state.models, index=current_idx)
+    state.selected_model = st.sidebar.selectbox(
+        "Select a model", state.models, index=current_idx
+    )
 
     state.cfg = load_experiment_from_file(state.selected_model)
