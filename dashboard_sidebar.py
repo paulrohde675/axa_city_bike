@@ -45,7 +45,6 @@ def side_bar() -> None:
     # List of model names
     model_names = list(state.models.keys())
     current_idx = model_names.index(state.selected_model)
-    print(f"current_idx: {current_idx}")
     state.selected_model = st.sidebar.selectbox("Select a model", state.models, index=current_idx)
 
     state.cfg = load_experiment_from_file(state.selected_model)

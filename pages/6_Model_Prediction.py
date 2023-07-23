@@ -120,13 +120,13 @@ def page_model_prediction():
     with st.expander("Create an event"):
         gender = st.slider("gender", min_value=1, value=0, max_value=2, step=1)
         birth_year = st.slider(
-            "birth_year", min_value=1918, value=1991, max_value=2005, step=1
+            "birth_year", min_value=1918, value=1969, max_value=2005, step=1
         )
         time = st.slider("time", min_value=0, value=14, max_value=23, step=1)
         day = st.slider("day", min_value=0, value=1, max_value=6, step=1)
         month = st.slider("month", min_value=0, value=7, max_value=11, step=1)
         tripduration = st.slider(
-            "tripduration", min_value=60, value=900, max_value=86400, step=10
+            "tripduration", min_value=60, value=2400, max_value=86400, step=10
         )
         start_station_id = st.slider(
             "start_station_id", min_value=0, value=3100, max_value=4000, step=10

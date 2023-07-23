@@ -181,8 +181,14 @@ def page_data_exploration():
     numeric_columns = df.select_dtypes(include=["int64", "float64", "int32"]).columns
     col = st.selectbox("Select Feature", numeric_columns)
     bins = st.slider("Number of bins", min_value=5, max_value=100, value=30, step=5)
-    min_val = float(df[col].min())
-    max_val = float(df[col].max())
+    
+    if col == 'tripduration':
+        df[col] = df[col]/3600
+        min_val = float(df[col].min())
+        max_val = float(24)
+    else:  
+        min_val = float(df[col].min())
+        max_val = float(df[col].max())
     
     min_max = st.slider(
         "Min / Max values",
@@ -192,7 +198,10 @@ def page_data_exploration():
     )
 
     # filter min max values
-    df = df[(df[col] > min_max[0]) & (df[col] < min_max[1])]
+    if col == 'tripduration':
+        df = df[(df[col] > min_max[0]) & (df[col] < min_max[1])]
+    else:
+        df = df[(df[col] > min_max[0]) & (df[col] < min_max[1])]
 
     # Split the page into two columns
     col1, col2 = st.columns(2)
